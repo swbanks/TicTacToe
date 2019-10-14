@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import Circle from './Circle';
 import Cross from './Cross';
 
 export default function App() {
+  const initialPositionState = [['', '', ''],['', '', ''],['', '', '']];
   const [circles, setCircles] = useState([]);
   const [crosses, setCrosses] = useState([]);
-  const [positionTracker, setPositionTracker] = useState([['', '', ''],['', '', ''],['', '', '']]);
+  const [positionTracker, setPositionTracker] = useState(initialPositionState);
   
   let xWins = false;
   let oWins = false;
@@ -36,6 +37,12 @@ export default function App() {
     console.log(`val = ${val}`);
     return val;
   };
+
+  const handleResetPress = () => {
+    setCircles([]);
+    setCrosses([]);
+    setPositionTracker(initialPositionState);
+  }
 
   const onTouchingBoard = (e) => {
     if (xWins || oWins) return;
@@ -71,6 +78,12 @@ export default function App() {
         {circles.map((e) => (<Circle color='skyblue' key={circles.indexOf(e)} xTranslate={e.translateX} yTranslate={e.translateY}/>))}
       </View>
     </TouchableWithoutFeedback >
+    <Text style={styles.text}>
+      {xWins ? 'X wins!' : (oWins ? 'O Wins!' : '')}
+    </Text>
+    <TouchableHighlight onPress={handleResetPress} style={[styles.button, {marginTop: 50}]}>
+      <Text style={styles.buttonText}>{xWins || oWins ? 'Play Again' : 'Reset'}</Text>
+    </TouchableHighlight>
     </View>
   );
 }
@@ -111,5 +124,26 @@ const styles = StyleSheet.create({
      { translateX: 0 },
      { translateY: 100 }
     ]
+  },
+  button: {
+    height: 50,
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    alignSelf: 'stretch',
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  text: {
+    color: 'green',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 100,
+    textAlign: 'center'
   }
 });
