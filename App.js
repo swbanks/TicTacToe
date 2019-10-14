@@ -10,7 +10,7 @@ export default function App() {
   
   let xWins = false;
   let oWins = false;
-  const winningCoordinates = [[[0,0], [1,0], [2,0]], [[0,1], [1,1], [2,1]], [[0,2], [1,2], [2,2]]];
+  const winningCoordinates = [[[0,0], [1,0], [2,0]], [[0,1], [1,1], [2,1]], [[0,2], [1,2], [2,2]], [[0,0], [0,1], [0,2]], [[1,0], [1,1], [1,2]], [[2,0], [2,1], [2,2]], [[0,0], [1,1], [2,2]], [[0,2], [1,1], [2,0]]];
   winningCoordinates.some((triplet) => {
     let firstCoordinate = positionTracker[triplet[0][0]][triplet[0][1]];
     let secondCoordinate = positionTracker[triplet[1][0]][triplet[1][1]];
