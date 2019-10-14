@@ -6,7 +6,31 @@ import Cross from './Cross';
 export default function App() {
   const [circles, setCircles] = useState([]);
   const [crosses, setCrosses] = useState([]);
+  const [positionTracker, setPositionTracker] = useState([['', '', ''],['', '', ''],['', '', '']]);
   
+  let xWins = false;
+  let oWins = false;
+  const winningCoordinates = [[[0,0], [1,0], [2,0]], [[0,1], [1,1], [2,1]], [[0,2], [1,2], [2,2]]];
+  winningCoordinates.some((triplet) => {
+    let firstCoordinate = positionTracker[triplet[0][0]][triplet[0][1]];
+    let secondCoordinate = positionTracker[triplet[1][0]][triplet[1][1]];
+    let thirdCoordinate = positionTracker[triplet[2][0]][triplet[2][1]];
+    
+    if(firstCoordinate === 'X' && secondCoordinate === 'X' && thirdCoordinate == 'X')
+    {
+      xWins = true;
+      return true;
+    } else if (firstCoordinate === 'O' && secondCoordinate === 'O' && thirdCoordinate == 'O') {
+      oWins = true;
+      return true;
+    }
+    return false;
+  });
+
+  const getArrayIndex = (coordinate) => {
+    return (coordinate - 10) / 100;
+  };
+
   const setCoordinates = (touchedX) => {
     let val = Math.trunc(parseInt(touchedX) / 100) * 100 + 10; 
     console.log(`val = ${val}`);
@@ -14,19 +38,26 @@ export default function App() {
   };
 
   const onTouchingBoard = (e) => {
-    
+    if (xWins || oWins) return;
     const {locationX, locationY } = e.nativeEvent;
     let x = setCoordinates(locationX);
     let y = setCoordinates(locationY);
 
+    let positions = positionTracker;
     if(crosses.length === circles.length) {
+      positions[getArrayIndex(x)][getArrayIndex(y)] = 'X';
+      setPositionTracker(positions);
       setCrosses(crosses.concat([{translateX: x, translateY: y}]));
     } else {
+      positions[getArrayIndex(x)][getArrayIndex(y)] = 'O';
+      setPositionTracker(positions);
       setCircles(circles.concat([{translateX: x, translateY: y}]));
     }
 
-    console.log(`x = ${locationX}, y = ${locationY}`);
+    console.log(`positions array = ${positions}`);
   };
+
+  console.log(`x wins = ${xWins}, o wins = ${oWins}`);
 
   return (
     <View>
