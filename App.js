@@ -32,7 +32,7 @@ export default function App() {
     return (coordinate - 10) / 100;
   };
 
-  const setCoordinates = (touchedX) => {
+  const getCoordinates = (touchedX) => {
     let val = Math.trunc(parseInt(touchedX) / 100) * 100 + 10; 
     console.log(`val = ${val}`);
     return val;
@@ -44,12 +44,17 @@ export default function App() {
     setPositionTracker(initialPositionState);
   }
 
+  const isSpotOnBoardTaken = (x, y) => {
+    return positionTracker[getArrayIndex(x)][getArrayIndex(y)] !== '';
+  };
+
   const onTouchingBoard = (e) => {
     if (xWins || oWins) return;
     const {locationX, locationY } = e.nativeEvent;
-    let x = setCoordinates(locationX);
-    let y = setCoordinates(locationY);
+    let x = getCoordinates(locationX);
+    let y = getCoordinates(locationY);
 
+    if (isSpotOnBoardTaken(x, y)) return; 
     let positions = positionTracker;
     if(crosses.length === circles.length) {
       positions[getArrayIndex(x)][getArrayIndex(y)] = 'X';
@@ -63,8 +68,6 @@ export default function App() {
 
     console.log(`positions array = ${positions}`);
   };
-
-  console.log(`x wins = ${xWins}, o wins = ${oWins}`);
 
   return (
     <View>
