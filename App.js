@@ -5,6 +5,7 @@ import Cross from './Cross';
 
 export default function App() {
   const [circles, setCircles] = useState([]);
+  const [crosses, setCrosses] = useState([]);
   
   const setCoordinates = (touchedX) => {
     let val = Math.trunc(parseInt(touchedX) / 100) * 100 + 10; 
@@ -18,7 +19,12 @@ export default function App() {
     let x = setCoordinates(locationX);
     let y = setCoordinates(locationY);
 
-    setCircles(circles.concat([{translateX: x, translateY: y}]));
+    if(crosses.length === circles.length) {
+      setCrosses(crosses.concat([{translateX: x, translateY: y}]));
+    } else {
+      setCircles(circles.concat([{translateX: x, translateY: y}]));
+    }
+
     console.log(`x = ${locationX}, y = ${locationY}`);
   };
 
@@ -30,8 +36,8 @@ export default function App() {
         <View style={[styles.vline, {transform: [{translateX: 200}, { translateY: 0 }]}]} />
         <View style={styles.hline} />
         <View style={[styles.hline, {transform: [{translateX: 0}, { translateY: 200 }]}]} />
-        {circles.map((e) => (<Cross color='red' key={circles.indexOf(e)} xTranslate={e.translateX} yTranslate={e.translateY}/>))}
-        
+        {crosses.map((e) => (<Cross color='red' key={crosses.indexOf(e)} xTranslate={e.translateX} yTranslate={e.translateY}/>))}
+        {circles.map((e) => (<Circle color='skyblue' key={circles.indexOf(e)} xTranslate={e.translateX} yTranslate={e.translateY}/>))}
       </View>
     </TouchableWithoutFeedback >
     </View>
